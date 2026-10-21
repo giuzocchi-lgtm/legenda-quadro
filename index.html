@@ -648,7 +648,7 @@ function aggiungiGruppo(nome='') {
 
 // ─── RIGHE ───
 let rigaId = 0;
-function aggiungiRiga(n='', desc='', prot='B16 A', protAttiva=true) {
+function aggiungiRiga(n='', desc='', prot='', protAttiva=false) {
   const id = ++rigaId;
   righe.push(id);
   const tbody = document.getElementById('circuitiBody');
