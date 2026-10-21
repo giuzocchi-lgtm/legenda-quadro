@@ -229,7 +229,7 @@ textarea { resize: vertical; min-height: 56px; }
 /* ─── CARTA INTESTATA PREVIEW ─── */
 .leg-intestata {
   background: #fff;
-  padding: 28px 44px 0 44px;
+  padding: 44px 44px 0 44px;
 }
 .a5 .leg-intestata { padding: 20px 32px 0 32px; }
 
@@ -240,7 +240,9 @@ textarea { resize: vertical; min-height: 56px; }
   margin-bottom: 0;
 }
 .leg-logo-img {
-  height: 52px;
+  height: 44px;
+  width: auto;
+  object-fit: contain;
 }
 .a5 .leg-logo-img { height: 38px; }
 
@@ -275,10 +277,9 @@ textarea { resize: vertical; min-height: 56px; }
 .leg-table thead th:first-child { width: 52px; text-align: center; }
 .leg-table thead th:last-child { width: 110px; }
 
-.leg-table tbody tr:nth-child(even) { background: #F7F8FA; }
-.leg-table tbody tr:hover { background: #EEF0F4; }
+.leg-table tbody tr:hover { background: #F5F6F8; }
 .leg-table tbody td {
-  padding: 8px 12px; font-size: 13px; border-bottom: 1px solid #E2E6ED; color: #1A2332;
+  padding: 8px 12px; font-size: 13px; color: #1A2332;
 }
 .a5 .leg-table tbody td { padding: 6px 9px; font-size: 11px; }
 
@@ -866,16 +867,9 @@ function generaPDF() {
       return;
     }
 
-    if (altRow % 2 === 0) {
-      doc.setFillColor(...bgRow);
-      doc.rect(mx, y, uw, rowH, 'F');
-    }
     altRow++;
-    doc.setDrawColor(226, 230, 237);
-    doc.setLineWidth(0.2);
-    doc.line(mx, y + rowH, mx + uw, y + rowH);
 
-    doc.setTextColor(...azBord);
+    doc.setTextColor(...fgDark);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10 * fs);
     doc.text(r.n || '–', mx + colW[0] / 2, y + 5 * fs, { align: 'center' });
@@ -894,9 +888,9 @@ function generaPDF() {
       doc.text('—', bx + (colW[2] - 4) / 2, y + 4.8 * fs, { align: 'center' });
     } else {
       const isDV = r.prot.toLowerCase().includes('verif');
-      doc.setFillColor(isDV ? 254 : 245, isDV ? 243 : 232, isDV ? 226 : 232);
+      doc.setFillColor(isDV ? 254 : 238, isDV ? 243 : 241, isDV ? 226 : 245);
       doc.roundedRect(bx, y + 1.5 * fs, colW[2] - 4, 4.5 * fs, 1, 1, 'F');
-      doc.setTextColor(isDV ? 230 : 140, isDV ? 126 : 21, isDV ? 34 : 21);
+      doc.setTextColor(isDV ? 230 : 26, isDV ? 126 : 35, isDV ? 34 : 50);
       doc.setFont('courier', 'bold');
       doc.setFontSize(7.5 * fs);
       doc.text(r.prot || '–', bx + (colW[2] - 4) / 2, y + 4.8 * fs, { align: 'center' });
