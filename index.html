@@ -225,6 +225,7 @@ textarea { resize: vertical; min-height: 56px; }
 
 .preview-sheet.a4 { width: 794px; min-height: 400px; padding: 0; }
 .preview-sheet.a5 { width: 559px; min-height: 300px; padding: 0; }
+.preview-sheet.a6 { width: 420px; min-height: 298px; padding: 0; }
 
 /* ─── CARTA INTESTATA PREVIEW ─── */
 .leg-intestata {
@@ -369,6 +370,7 @@ textarea { resize: vertical; min-height: 56px; }
   .preview-area { padding: 12px 8px; }
   .preview-sheet.a4 { width: 350px; }
   .preview-sheet.a5 { width: 300px; }
+  .preview-sheet.a6 { width: 280px; }
   .leg-intestata, .leg-body { padding-left: 20px; padding-right: 20px; }
   .leg-note { margin-left: 20px; margin-right: 20px; }
   .leg-footer { padding: 8px 20px; }
@@ -377,6 +379,7 @@ textarea { resize: vertical; min-height: 56px; }
 @media (min-width: 721px) {
   .preview-sheet.a4 { transform: scale(.88); transform-origin: top center; margin-bottom: -100px; }
   .preview-sheet.a5 { transform: scale(.93); transform-origin: top center; margin-bottom: -30px; }
+  .preview-sheet.a6 { transform: scale(.95); transform-origin: top center; margin-bottom: -20px; }
 }
 </style>
 
@@ -405,6 +408,7 @@ textarea { resize: vertical; min-height: 56px; }
       <div class="format-toggle">
         <button id="btnA4" class="active" onclick="setFormato('A4')">A4 (210×297 mm)</button>
         <button id="btnA5" onclick="setFormato('A5')">A5 (148×210 mm)</button>
+        <button id="btnA6" onclick="setFormato('A6')">A6 orizz. (148×105 mm)</button>
       </div>
     </div>
 
@@ -620,6 +624,7 @@ function setFormato(f) {
   document.getElementById('previewLabel').textContent = 'Anteprima ' + f;
   document.getElementById('btnA4').className = f==='A4' ? 'active' : '';
   document.getElementById('btnA5').className = f==='A5' ? 'active' : '';
+  document.getElementById('btnA6').className = f==='A6' ? 'active' : '';
 }
 
 // ─── GRUPPI ───
@@ -765,11 +770,13 @@ function formatData(d) { if (!d) return ''; const [y,m,g] = d.split('-'); return
 // ─── PDF ───
 function generaPDF() {
   const { jsPDF } = window.jspdf;
-  const fmt = formato === 'A4' ? 'a4' : 'a5';
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: fmt });
+  const isA6 = formato === 'A6';
+  const fmt = formato === 'A4' ? 'a4' : isA6 ? [148, 105] : 'a5';
+  const orientation = isA6 ? 'landscape' : 'portrait';
+  const doc = new jsPDF({ orientation, unit: 'mm', format: fmt });
 
-  const W = formato === 'A4' ? 210 : 148;
-  const H = formato === 'A4' ? 297 : 210;
+  const W = formato === 'A4' ? 210 : isA6 ? 148 : 148;
+  const H = formato === 'A4' ? 297 : isA6 ? 105 : 210;
   const mx = 14;
   const uw = W - mx * 2;
 
@@ -786,7 +793,7 @@ function generaPDF() {
   const fgMuted = [107, 122, 144];
   const bgRow = [249, 249, 249];
 
-  const fs = formato === 'A4' ? 1 : 0.78;
+  const fs = formato === 'A4' ? 1 : isA6 ? 0.60 : 0.78;
 
   let y = 8;
 
